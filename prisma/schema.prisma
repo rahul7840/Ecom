@@ -28,4 +28,6 @@ model Product {
   stock_status Boolean  @default(true)
   weight       Int?
   rating       Int?
+  add_to_cart  Boolean  @default(false)
+  wish_list    Boolean  @default(false)
 }

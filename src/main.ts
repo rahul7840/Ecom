@@ -13,6 +13,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT);
-  console.log('🌎  server is running 3k...');
+  console.log('🌎  server is running 4k...');
 }
 bootstrap();

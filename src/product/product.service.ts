@@ -1,4 +1,8 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
 import { ProductDTO } from './dto/addProduct.dto';
 import { PrismaService } from 'prisma/prisma.service';
 
@@ -79,5 +83,81 @@ export class ProductService {
     } catch (e) {
       console.log('error', e);
     }
+  }
+
+  async getCartItems() {
+    return await this.prisma.product.findMany({
+      where: { add_to_cart: true },
+    });
+  }
+
+  async addItemToCart(id: string) {
+    const productExists = await this.prisma.product.findUnique({
+      where: { id },
+    });
+    if (!productExists) {
+      throw new BadRequestException('Product not found');
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data: { add_to_cart: true },
+    });
+
+    return { message: 'Product added to cart successfully' };
+  }
+
+  async removeItemFromCart(id: string) {
+    const productExists = await this.prisma.product.findUnique({
+      where: { id },
+    });
+    if (!productExists) {
+      throw new BadRequestException('Product not found');
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data: { add_to_cart: false },
+    });
+
+    return { message: 'Product removed from cart successfully' };
+  }
+
+  async getWishlistItems() {
+    return await this.prisma.product.findMany({
+      where: { wish_list: true },
+    });
+  }
+
+  async addItemToWishlist(id: string) {
+    const productExists = await this.prisma.product.findUnique({
+      where: { id },
+    });
+    if (!productExists) {
+      throw new BadRequestException('Product not found');
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data: { wish_list: true },
+    });
+
+    return { message: 'Product added to wishlist successfully' };
+  }
+
+  async removeItemFromWishlist(id: string) {
+    const productExists = await this.prisma.product.findUnique({
+      where: { id },
+    });
+    if (!productExists) {
+      throw new BadRequestException('Product not found');
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data: { wish_list: false },
+    });
+
+    return { message: 'Product removed from wishlist successfully' };
   }
 }
