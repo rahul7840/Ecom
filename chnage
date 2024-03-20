@@ -1,0 +1,20 @@
+
+## .Env
+
+```bash
+DATABASE_URL=postgresql://postgres:7840@localhost:5434/ecom
+PORT=4000
+```
+
+## Running the app
+
+```bash
+# development
+$ yarn run start
+
+# watch mode
+$ yarn run start:dev
+
+# production mode
+$ yarn run start:prod
+```
