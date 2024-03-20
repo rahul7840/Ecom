@@ -4,6 +4,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   const config = new DocumentBuilder()
     .setTitle('E-Commerce')
     .setDescription('This is E-com')
@@ -13,6 +18,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT);
-  console.log('🌎  server is running 4k...');
+  console.log(`🌎 Server is running on port ${process.env.PORT}`);
 }
 bootstrap();
