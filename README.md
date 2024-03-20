@@ -2,7 +2,10 @@
 
 ## .env file
 
-The `.env` file contains environment variables used by the project. Make sure to fill in the necessary values before running the project.
+```bash
+    DATABASE_URL=postgresql://postgres:7840@localhost:5434/ecom
+    PORT=4000
+```
 
 ## Cloning the Repository
 
