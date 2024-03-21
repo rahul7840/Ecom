@@ -23,15 +23,21 @@ export class ProductService {
     try {
       const newProduct = await this.prisma.product.create({
         data: {
-          name: dto.name,
-          description: dto.description,
-          price: dto.price,
-          quantity: dto.quantity,
-          category: dto.category,
-          image_url: dto.image_url,
-          stock_status: dto.stock_status,
-          weight: dto.weight,
-          rating: dto.rating,
+          productTitle: dto.productTitle,
+          productVersion: dto.productVersion,
+          productDescription: dto.productDescription,
+          images: dto.images,
+          skuCode: dto.skuCode,
+          hsnCode: dto.hsnCode,
+          barCode: dto.barCode,
+          stock: dto.stock,
+          priceWithoutGst: dto.priceWithoutGst,
+          gst: dto.gst,
+          specification: dto.specification,
+          overview: dto.overview,
+          primaryImage: dto.primaryImage,
+          qty: dto.qty,
+          rating: dto.rating
         },
       });
       console.log(newProduct);
@@ -50,15 +56,21 @@ export class ProductService {
       const updatedProduct = await this.prisma.product.update({
         where: { id: id },
         data: {
-          name: dto.name,
-          description: dto.description,
-          price: dto.price,
-          quantity: dto.quantity,
-          category: dto.category,
-          image_url: dto.image_url,
-          stock_status: dto.stock_status,
-          weight: dto.weight,
-          rating: dto.rating,
+          productTitle: dto.productTitle,
+          productVersion: dto.productVersion,
+          productDescription: dto.productDescription,
+          images: dto.images,
+          skuCode: dto.skuCode,
+          hsnCode: dto.hsnCode,
+          barCode: dto.barCode,
+          stock: dto.stock,
+          priceWithoutGst: dto.priceWithoutGst,
+          gst: dto.gst,
+          specification: dto.specification,
+          overview: dto.overview,
+          primaryImage: dto.primaryImage,
+          qty: dto.qty,
+          rating: dto.rating
         },
       });
       console.log(updatedProduct);

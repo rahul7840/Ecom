@@ -16,8 +16,8 @@ datasource db {
 // schema.prisma
 
 model user {
-  id                String    @id @default(uuid())
-  email             String    @unique
+  id                String        @id @default(uuid())
+  email             String        @unique
   password          String
   username          String
   user_type         String?
@@ -25,7 +25,7 @@ model user {
   first_name        String?
   last_name         String?
   timezone_id       String? //***
-  is_active         Boolean   @default(true)
+  is_active         Boolean       @default(true)
   is_term_con       Boolean?
   phone_number      String?
   country_code      String?
@@ -34,31 +34,39 @@ model user {
   refresh_token     String? //****
   client_key        String? //****
   secret_key        String? //****
-  is_email_verified Boolean   @default(false)
-  created_at        DateTime  @default(now())
+  is_email_verified Boolean       @default(false)
+  created_at        DateTime      @default(now())
   deleted_at        DateTime?
-  updated_at        DateTime  @updatedAt
-  is_deleted        Boolean   @default(false)
+  updated_at        DateTime      @updatedAt
+  is_deleted        Boolean       @default(false)
   Review            Review[]
+  Order             Order[]
+  payment           Payment[]
+  user_address      UserAddress[]
 }
 
 model Product {
-  id           String     @id @default(uuid())
-  name         String
-  description  String
-  price        Int
-  quantity     Int
-  category     String
-  image_url    String
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  stock_status Boolean    @default(true)
-  weight       Int?
-  rating       Int?
-  add_to_cart  Boolean    @default(false)
-  wish_list    Boolean    @default(false)
-  Discount     Discount[]
-  Review       Review[]
+  id                 String      @id @default(uuid())
+  productTitle       String
+  productVersion     String
+  productDescription String
+  skuCode            String
+  hsnCode            String
+  barCode            String
+  images             String[]
+  stock              String
+  priceWithoutGst    Float
+  gst                Float
+  specification      Json
+  overview           Json
+  primaryImage       Json
+  qty                String
+  rating             String?
+  discounts          Discount[]
+  Review             Review[]
+  add_to_cart        Boolean     @default(false)
+  wish_list          Boolean     @default(false)
+  OrderItem          OrderItem[]
 }
 
 model Discount {
@@ -72,17 +80,120 @@ model Discount {
   product       Product  @relation(fields: [product_id], references: [id])
   product_id    String
   couponCode    String? /// working process
+  Order         Order?   @relation(fields: [orderId], references: [id])
+  orderId       String?
 }
 
 model Review {
-  id         String   @id @default(uuid())
-  product    Product  @relation(fields: [productId], references: [id])
+  id        String   @id @default(uuid())
+  product   Product  @relation(fields: [productId], references: [id])
   productId String
-  comment    String
-  rating     String
-  user       user     @relation(fields: [userId], references: [id])
+  comment   String
+  rating    String
+  user      user     @relation(fields: [userId], references: [id])
   userId    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  images     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  images    String[]
+}
+
+// model Order {
+//   id              String      @id @default(uuid())
+//   orderNumber     String      @unique
+//   paymentId       String?
+//   userId          String?
+//   user            User?       @relation(fields: [userId], references: [id])
+//   orderStatus     Float?      @default(0.0)
+//   trackingId      Float?
+//   estDeliverDate  Float?
+//   actDeliverDate  String?
+//   trackingStatus  String?
+//   gstin           Float?
+//   totalAmount     Json
+//   deliveryDetail  Json
+//   currency        Json
+//   shippingCost    Float?
+//   otherCost       Float?
+//   billToAddressId String?
+//   billToAddress   UserAddress @relation("billToAddress",fields: [billToAddressId], references: [id])
+//   shipToAddressId String?
+//   shipToAddress   UserAddress @relation("shipToAddress",fields: [shipToAddressId], references: [id])
+//   discounts       Discount[]
+//   payment         Payment[]
+//   orderItems      OrderItem[]
+// }
+
+model UserAddress {
+  id            String  @id @unique @default(uuid())
+  user          user    @relation(fields: [userId], references: [id])
+  userId        String
+  house_no      String
+  street        String
+  city          String
+  state         String
+  country       String
+  pincode       String
+  landmark      String
+  isDefult      Boolean @default(true)
+  billToAddress Order[] @relation("billTo")
+  shipToAddress Order[] @relation("shipTo")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model Payment {
+  id                  String   @id @unique @default(uuid())
+  user                user     @relation(fields: [userId], references: [id])
+  userId              String
+  total_amount        String
+  order               Order    @relation(fields: [orderId], references: [id])
+  orderId             String
+  currency_type       String
+  razorpay_order_id   String
+  razorpay_payment_id String
+  razorpay_sgnature   String
+  reason              String
+  attempt             String
+  status              String
+  payment_date        DateTime
+  payment_method      String
+  payment_id          String
+  payment_note        String
+  payment_meta        String
+  // Order               Order[]
+}
+
+model Order {
+  id              String       @id @default(uuid())
+  orderNumber     String       @unique
+  userId          String?
+  user            user?        @relation(fields: [userId], references: [id])
+  orderStatus     String?
+  trackingId      String?
+  estDeliverDate  String?
+  actDeliverDate  String?
+  trackingStatus  String?
+  gstin           String?
+  totalAmount     String
+  deliveryDetail  String
+  currency        String
+  shippingCost    String?
+  otherCost       String?
+  billToAddressId String?
+  // payment         Payment      @relation(fields: [paymentId], references: [id])
+  // paymentId       String
+  billToAddress   UserAddress? @relation("billTo", fields: [billToAddressId], references: [id])
+  shipToAddressId String?
+  shipToAddress   UserAddress? @relation("shipTo", fields: [shipToAddressId], references: [id])
+  discounts       Discount[]
+  orderItems      OrderItem[]
+  payment         Payment[]
 }
