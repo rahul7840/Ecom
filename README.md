@@ -1,5 +1,3 @@
-# Project README
-
 ## .env file
 
 ```bash

@@ -16,8 +16,8 @@ datasource db {
 // schema.prisma
 
 model user {
-  id                String    @id @default(uuid())
-  email             String    @unique
+  id                String        @id @default(uuid())
+  email             String        @unique
   password          String
   username          String
   user_type         String?
@@ -25,7 +25,7 @@ model user {
   first_name        String?
   last_name         String?
   timezone_id       String? //***
-  is_active         Boolean   @default(true)
+  is_active         Boolean       @default(true)
   is_term_con       Boolean?
   phone_number      String?
   country_code      String?
@@ -34,31 +34,39 @@ model user {
   refresh_token     String? //****
   client_key        String? //****
   secret_key        String? //****
-  is_email_verified Boolean   @default(false)
-  created_at        DateTime  @default(now())
+  is_email_verified Boolean       @default(false)
+  created_at        DateTime      @default(now())
   deleted_at        DateTime?
-  updated_at        DateTime  @updatedAt
-  is_deleted        Boolean   @default(false)
+  updated_at        DateTime      @updatedAt
+  is_deleted        Boolean       @default(false)
   Review            Review[]
+  Order             Order[]
+  payment           Payment[]
+  user_address      UserAddress[]
 }
 
 model Product {
-  id           String     @id @default(uuid())
-  name         String
-  description  String
-  price        Int
-  quantity     Int
-  category     String
-  image_url    String
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  stock_status Boolean    @default(true)
-  weight       Int?
-  rating       Int?
-  add_to_cart  Boolean    @default(false)
-  wish_list    Boolean    @default(false)
-  Discount     Discount[]
-  Review       Review[]
+  id                 String      @id @default(uuid())
+  productTitle       String
+  productVersion     String
+  productDescription String
+  skuCode            String
+  hsnCode            String
+  barCode            String
+  images             String[]
+  stock              String
+  priceWithoutGst    Float
+  gst                Float
+  specification      Json
+  overview           Json
+  primaryImage       Json
+  qty                String
+  rating             String?
+  discounts          Discount[]
+  Review             Review[]
+  add_to_cart        Boolean     @default(false)
+  wish_list          Boolean     @default(false)
+  OrderItem          OrderItem[]
 }
 
 model Discount {
@@ -72,6 +80,8 @@ model Discount {
   product       Product  @relation(fields: [product_id], references: [id])
   product_id    String
   couponCode    String? /// working process
+  Order         Order?   @relation(fields: [orderId], references: [id])
+  orderId       String?
 }
 
 model Review {
@@ -82,7 +92,7 @@ model Review {
   rating    String
   user      user     @relation(fields: [userId], references: [id])
   userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  images    String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  images     String[]
 }
