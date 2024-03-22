@@ -95,7 +95,11 @@ export class AuthService {
 
   //find user
   async findAll() {
-    return await this.prismaService.user.findMany();
+    const Getall = await this.prismaService.user.findMany();
+    if (!Getall)
+      throw new NotFoundException('there is no user! creat the user first');
+
+    return Getall;
   }
 
   //update user

@@ -80,7 +80,7 @@ model Discount {
   product       Product  @relation(fields: [product_id], references: [id])
   product_id    String
   couponCode    String? /// working process
-  Order         Order?   @relation(fields: [orderId], references: [id])
+  Order         Order?    @relation(fields: [orderId], references: [id])
   orderId       String?
 }
 
@@ -92,7 +92,82 @@ model Review {
   rating    String
   user      user     @relation(fields: [userId], references: [id])
   userId    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  images     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  images    String[]
+}
+
+model UserAddress {
+  id            String  @id @unique @default(uuid())
+  user          user    @relation(fields: [userId], references: [id])
+  userId        String
+  house_no      String
+  street        String
+  city          String
+  state         String
+  country       String
+  pincode       String
+  landmark      String
+  isDefult      Boolean @default(true)
+  billToAddress Order[] @relation("billTo")
+  shipToAddress Order[] @relation("shipTo")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model Payment {
+  id                  String   @id @unique @default(uuid())
+  user                user     @relation(fields: [userId], references: [id])
+  userId              String
+  total_amount        String
+  order               Order    @relation(fields: [orderId], references: [id])
+  orderId             String
+  currency_type       String
+  razorpay_order_id   String
+  razorpay_payment_id String
+  razorpay_sgnature   String
+  reason              String
+  attempt             String
+  status              String
+  payment_date        DateTime
+  payment_method      String
+  payment_id          String
+  payment_note        String
+  payment_meta        String
+  // Order               Order[]
+}
+
+model Order {
+  id              String       @id @default(uuid())
+  orderNumber     String       @unique
+  userId          String?
+  user            user?        @relation(fields: [userId], references: [id])
+  orderStatus     String?
+  trackingId      String?
+  estDeliverDate  String?
+  actDeliverDate  String?
+  trackingStatus  String?
+  gstin           String?
+  totalAmount     String
+  deliveryDetail  String
+  currency        String
+  shippingCost    String?
+  otherCost       String?
+  billToAddressId String?
+  // payment         Payment      @relation(fields: [paymentId], references: [id])
+  // paymentId       String
+  billToAddress   UserAddress? @relation("billTo", fields: [billToAddressId], references: [id])
+  shipToAddressId String?
+  shipToAddress   UserAddress? @relation("shipTo", fields: [shipToAddressId], references: [id])
+  discounts       Discount[]
+  orderItems      OrderItem[]
+  payment         Payment[]
 }
