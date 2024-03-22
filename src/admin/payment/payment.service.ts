@@ -49,6 +49,13 @@ export class PaymentService {
   }
 
   // for addresss of users
+
+  async findall() {
+    const rr = await this.prisma.userAddress.findMany();
+    console.log('==>', rr);
+    return rr;
+  }
+
   async createUserAddress(dto: UserAddressDTO) {
     try {
       return await this.prisma.userAddress.create({

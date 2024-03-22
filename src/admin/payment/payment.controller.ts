@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { PaymentDTO } from './dto/payment.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,13 +14,18 @@ export class PaymentController {
   }
 
   @ApiTags('Address')
-  @Post()
+  @Get('address')
+  async findAll() {
+    return this.paymentService.findall();
+  }
+  @ApiTags('Address')
+  @Post('address')
   async createUserAddress(@Body() dto: UserAddressDTO) {
     return this.paymentService.createUserAddress(dto);
   }
 
   @ApiTags('Address')
-  @Delete(':userId')
+  @Delete('address/:userId')
   async deleteUserAddress(@Param('userId') userId: string) {
     return this.paymentService.deleteUserAddress(userId);
   }
