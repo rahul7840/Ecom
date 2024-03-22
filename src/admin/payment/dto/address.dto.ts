@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class UserAddressDTO {
   @IsString()

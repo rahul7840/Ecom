@@ -1,13 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { UserAddressDTO } from './dto/address.dto';
 import { PaymentDTO } from './dto/payment.dto';
+import { UserAddressDTO } from './dto/address.dto';
 
 @Injectable()
 export class PaymentService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: PaymentDTO) {
+    const { userId, orderId } = dto;
+    const findUserId = await this.prisma.user.findFirst({
+      where: { id: userId },
+    });
+    if (!findUserId) {
+      throw new BadRequestException('does not find user id ');
+    }
+    const findOrder = await this.prisma.order.findFirst({
+      where: {
+        id: orderId,
+      },
+    });
+    if (!findOrder) {
+      throw new BadRequestException('does not find order ');
+    }
     return await this.prisma.payment.create({
       data: {
         userId: dto.userId,

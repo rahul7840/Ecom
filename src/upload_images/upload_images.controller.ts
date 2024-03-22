@@ -7,10 +7,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { CloudinaryService } from './cloudinary.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { UploadImageDto } from './dto/uploadImage.dto';
 import { UploadVideoDto } from './dto/uploadVideo.dto';
+import { CloudinaryService } from './cloudinary.service';
 
 @ApiTags('Upload_Images')
 @Controller('upload')
@@ -34,6 +34,7 @@ export class UploadImagesController {
       throw new Error('Failed to upload images');
     }
   }
+
   @Post('video')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('video'))

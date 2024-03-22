@@ -1,13 +1,29 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { OrderDTO } from './dto/order.dto';
+import { OrderItemDto } from './dto/order_item.dto';
 
 @Injectable()
 export class OrderSerrvice {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: OrderDTO) {
+    const { userId, billToAddressId, shipToAddressId } = dto;
     const orderNumber = await this.generateUniqueOrderNumber();
+    const findUserId = await this.prisma.user.findFirst({
+      where: { id: userId },
+    });
+    if (!findUserId) {
+      throw new BadRequestException('does not find user id ');
+    }
+    const findUserAddress = await this.prisma.userAddress.findFirst({
+      where: {
+        OR: [{ id: billToAddressId }, { id: shipToAddressId }],
+      },
+    });
+    if (!findUserAddress) {
+      throw new BadRequestException('does not find user address ');
+    }
     const orderDetails = await this.prisma.order.create({
       data: {
         orderNumber: orderNumber,
@@ -30,6 +46,7 @@ export class OrderSerrvice {
         payment: true,
       },
     });
+
     return {
       id: orderDetails?.id,
       orderNumber: orderDetails?.orderNumber,
@@ -56,6 +73,9 @@ export class OrderSerrvice {
     };
   }
 
+  async findAll() {
+    return await this.prisma.order.findMany();
+  }
   // async findAll() {
   //     const orderDetails = await this.prisma.order.findMany({
   //         include: {
@@ -123,7 +143,40 @@ export class OrderSerrvice {
     };
   }
 
-  async generateUniqueOrderNumber(): Promise<string> {
+  // for orderItem
+
+  async orderItemCreate(dto: OrderItemDto) {
+    const { orderId, productID } = dto;
+    const userOrder = await this.prisma.order.findFirst({
+      where: { id: orderId },
+    });
+    if (!userOrder) {
+      throw new BadRequestException('order is not found');
+    }
+    const userProduct = await this.prisma.product.findFirst({
+      where: { id: productID },
+    });
+    if (!userProduct) {
+      throw new BadRequestException('product is not found');
+    }
+    return await this.prisma.orderItem.create({
+      data: {
+        orderId: dto.orderId,
+        productId: dto.productID,
+        quantity: dto.quantity,
+        price: dto.price,
+      },
+    });
+  }
+  async findOrderItem(id: string) {
+    return await this.prisma.orderItem.findFirst({
+      where: {
+        OR: [{ orderId: id }, { productId: id }],
+      },
+    });
+  }
+
+  private async generateUniqueOrderNumber(): Promise<string> {
     const timestamp = Date.now().toString(36); // Convert timestamp to base36 string
     const randomString = Math.random().toString(36).substr(2, 8); // Random component
     const orderNumber = timestamp + randomString;

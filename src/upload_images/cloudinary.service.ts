@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
+import { v2 } from 'cloudinary';
 
 @Injectable()
-export class CloudinaryService{
+export class CloudinaryService {
   constructor() {
     v2.config({
       cloud_name: 'dffvzezv8',
@@ -32,7 +32,9 @@ export class CloudinaryService{
   async uploadImages(filePaths: string[]): Promise<string[]> {
     try {
       const uploadPromises = filePaths.map(async (filePath) => {
-        const result = await v2.uploader.upload(filePath, { folder: 'uploads' });
+        const result = await v2.uploader.upload(filePath, {
+          folder: 'uploads',
+        });
         return result.secure_url || '';
       });
 
@@ -43,7 +45,6 @@ export class CloudinaryService{
       throw new Error('Failed to upload images to Cloudinary');
     }
   }
-
 
   async uploadVideo(filePath: string): Promise<string> {
     try {

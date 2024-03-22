@@ -6,10 +6,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
-  imports:[MulterModule.register({
-    dest:'./uploads'
-  }),PrismaModule],
+  imports: [
+    MulterModule.register({
+      dest: './uploads',
+    }),
+    PrismaModule,
+  ],
   controllers: [UploadImagesController],
-  providers: [UploadImagesService,CloudinaryService],
+  providers: [UploadImagesService, CloudinaryService],
 })
 export class UploadImagesModule {}
