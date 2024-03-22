@@ -127,4 +127,5 @@ export class ProductController {
   async removeItemFromWishlist(@Param('id') id: string) {
     return await this.productService.removeItemFromWishlist(id);
   }
+  //test push
 }
