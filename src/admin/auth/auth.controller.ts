@@ -109,9 +109,6 @@ export class AuthController {
     return this.authService.findAll();
   }
 
-
-  
-
   @Put(':id')
   @ApiResponse({
     status: 201,
@@ -157,6 +154,4 @@ export class AuthController {
   deletesuperuser(@Param('id', ParseUUIDPipe) id: string) {
     return this.authService.delete(id);
   }
-
-
 }

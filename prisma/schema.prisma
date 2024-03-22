@@ -75,14 +75,14 @@ model Discount {
 }
 
 model Review {
-  id         String   @id @default(uuid())
-  product    Product  @relation(fields: [productId], references: [id])
+  id        String   @id @default(uuid())
+  product   Product  @relation(fields: [productId], references: [id])
   productId String
-  comment    String
-  rating     String
-  user       user     @relation(fields: [userId], references: [id])
+  comment   String
+  rating    String
+  user      user     @relation(fields: [userId], references: [id])
   userId    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  images     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  images    String[]
 }

@@ -2,7 +2,7 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { DiscountService } from './discount.service';
 import { CreateDiscountDto } from './dto/discount.dto';
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Admin-Discount')
 @Controller('discounts')

@@ -45,7 +45,8 @@ export class ProductDTO {
   category: string;
 
   @ApiProperty({
-    example: "https://res.cloudinary.com/dffvzezv8/image/upload/v1710939189/uploads/w20vuu3xtv3xydakzevl.jpg",
+    example:
+      'https://res.cloudinary.com/dffvzezv8/image/upload/v1710939189/uploads/w20vuu3xtv3xydakzevl.jpg',
     description: 'The URL of the product image.',
   })
   @IsString()

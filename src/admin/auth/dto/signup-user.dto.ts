@@ -24,5 +24,4 @@ export class SignupUserDto {
     required: true,
   })
   username: string;
-
 }

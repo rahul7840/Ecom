@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString, isArray } from 'class-validator';
-import { isatty } from 'tty';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UploadImageDto {
-
-@ApiProperty({ format: 'binary', description: 'Image file' })
+  @ApiProperty({ format: 'binary', description: 'Image file' })
   @IsNotEmpty()
-  @IsString()
   @IsArray()
+  @IsString({ each: true })
   @IsOptional()
   public images: string[];
 }

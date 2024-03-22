@@ -1,5 +1,5 @@
 // update-user.dto.ts
-import { IsOptional, IsString, IsBoolean, IsDateString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
@@ -76,5 +76,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   secret_key?: string;
-
 }

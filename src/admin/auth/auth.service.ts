@@ -18,9 +18,8 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-
   async signup(dto: SignupUserDto) {
-    let user = await this.prismaService.user.findFirst({
+    const user = await this.prismaService.user.findFirst({
       where: {
         OR: [{ email: dto.email }, { username: dto.username }],
       },
@@ -38,17 +37,15 @@ export class AuthService {
       user.is_deleted === true &&
       user.email === dto.email &&
       user.username === dto.username
-  ) {
-    const newPassword = await this.hashPassword(dto.password);
+    ) {
+      const newPassword = await this.hashPassword(dto.password);
 
       const updatedUser = await this.prismaService.user.update({
-          where: { id: user.id },
-          data: { is_deleted: false,
-            password:newPassword
-           },
+        where: { id: user.id },
+        data: { is_deleted: false, password: newPassword },
       });
       return updatedUser;
-  }
+    }
 
     const newPassword = await this.hashPassword(dto.password);
 
@@ -60,6 +57,7 @@ export class AuthService {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: userPassword, ...sanitizedUser } = newUser;
     return sanitizedUser;
   }
@@ -99,8 +97,6 @@ export class AuthService {
   async findAll() {
     return await this.prismaService.user.findMany();
   }
-
-  
 
   //update user
   async update(id: string, dto: UpdateUserDto) {
@@ -155,9 +151,6 @@ export class AuthService {
     return { message: ' user deleted!!' };
   }
 
-
-
-
   //reset password
   async resetPassword(dto: ResetPasswordDto) {
     const { email, password } = dto;
@@ -175,6 +168,7 @@ export class AuthService {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: userPassword, ...sanitizedUser } = user;
 
     return sanitizedUser;
@@ -202,8 +196,4 @@ export class AuthService {
     const saltOrRounds = 10;
     return await bcrypt.hash(password, saltOrRounds);
   }
-
- 
-
-
 }

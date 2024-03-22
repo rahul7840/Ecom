@@ -1,10 +1,9 @@
 import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { ReviewService } from './review.service';
-import { Review } from '@prisma/client';
 import { CreateReviewDto } from './dto/review.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags("Reviews")
+@ApiTags('Reviews')
 @Controller('reviews')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
@@ -20,7 +19,7 @@ export class ReviewController {
   }
 
   @Get(':productId')
-  async findOne(@Param('productId') productId:string) {
+  async findOne(@Param('productId') productId: string) {
     return this.reviewService.findOne(productId);
   }
 }
