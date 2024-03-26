@@ -4,14 +4,14 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { ProductDTO } from './dto/addProduct.dto';
 
-@Controller('Pruduct')
+@Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
   @Get()
@@ -19,9 +19,19 @@ export class ProductController {
     summary: 'list-all product',
     description: 'list-all product.',
   })
-  @ApiTags('Pruduct')
+  @ApiTags('Product')
   async getAllProducts() {
     return await this.productService.getAllProducts();
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'list-all product',
+    description: 'list-all product.',
+  })
+  @ApiTags('Product')
+  async getbYProducts(@Param('id') id: string) {
+    return await this.productService.getbyIdProducts(id);
   }
 
   @Post('')
@@ -33,11 +43,11 @@ export class ProductController {
     summary: 'create product',
     description: 'create product.',
   })
-  @ApiTags('Pruduct')
+  @ApiTags('Product')
   async addProduct(@Body() dto: ProductDTO) {
     return await this.productService.addproduct(dto);
   }
-  @Put(':id')
+  @Patch(':id')
   @ApiResponse({
     status: 200,
     description: 'update created.',
@@ -46,7 +56,7 @@ export class ProductController {
     summary: 'update product',
     description: 'update product.',
   })
-  @ApiTags('Pruduct')
+  @ApiTags('Product')
   async updateProduct(@Param('id') id: string, @Body() dto: ProductDTO) {
     await this.productService.updateProduct(id, dto);
   }
@@ -60,7 +70,7 @@ export class ProductController {
     summary: 'Delete product',
     description: 'Delete product.',
   })
-  @ApiTags('Pruduct')
+  @ApiTags('Product')
   async deleteProduct(@Param('id') id: string) {
     await this.productService.deleteProduct(id);
   }

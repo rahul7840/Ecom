@@ -19,6 +19,20 @@ export class ProductService {
     }
   }
 
+  async getbyIdProducts(id: string) {
+    try {
+      const findProduct = await this.prisma.product.findFirst({
+        where: { id },
+      });
+      if (!findProduct)
+        throw new BadRequestException('product does not exist with this id');
+
+      return findProduct;
+    } catch (e) {
+      console.log('error', e);
+    }
+  }
+
   async addproduct(dto: ProductDTO) {
     try {
       const newProduct = await this.prisma.product.create({
