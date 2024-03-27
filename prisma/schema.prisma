@@ -43,6 +43,8 @@ model user {
   Order             Order[]
   payment           Payment[]
   user_address      UserAddress[]
+  Cart              Cart[]
+  WishList          WishList[]
 }
 
 model Product {
@@ -64,9 +66,28 @@ model Product {
   rating             String?
   discounts          Discount[]
   Review             Review[]
-  add_to_cart        Boolean     @default(false)
-  wish_list          Boolean     @default(false)
   OrderItem          OrderItem[]
+  Cart               Cart[]
+  WishList           WishList[]
+}
+
+model Cart {
+  id         String   @id @unique @default(uuid())
+  user       user     @relation(fields: [user_id], references: [id])
+  user_id    String
+  product    Product  @relation(fields: [product_id], references: [id])
+  product_id String
+  quantity   String
+  created_at DateTime @default(now())
+}
+
+model WishList {
+  id         String  @id @unique @default(uuid())
+  user       user    @relation(fields: [user_id], references: [id])
+  user_id    String
+  product    Product @relation(fields: [product_id], references: [id])
+  product_id String
+  wish_list  Boolean
 }
 
 model Discount {
@@ -80,7 +101,7 @@ model Discount {
   product       Product  @relation(fields: [product_id], references: [id])
   product_id    String
   couponCode    String? /// working process
-  Order         Order?    @relation(fields: [orderId], references: [id])
+  Order         Order?   @relation(fields: [orderId], references: [id])
   orderId       String?
 }
 

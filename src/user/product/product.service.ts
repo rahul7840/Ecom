@@ -19,6 +19,19 @@ export class ProductService {
     }
   }
 
+  async getbyIdProducts(id: string) {
+    try {
+      const findProduct = await this.prisma.product.findFirst({
+        where: { id },
+      });
+      if (!findProduct)
+        throw new BadRequestException('product does not exist with this id');
+
+      return findProduct;
+    } catch (e) {
+      console.log('error', e);
+    }
+  }
   async addproduct(dto: ProductDTO) {
     try {
       const newProduct = await this.prisma.product.create({
@@ -37,7 +50,7 @@ export class ProductService {
           overview: dto.overview,
           primaryImage: dto.primaryImage,
           qty: dto.qty,
-          rating: dto.rating
+          rating: dto.rating,
         },
       });
       console.log(newProduct);
@@ -70,7 +83,7 @@ export class ProductService {
           overview: dto.overview,
           primaryImage: dto.primaryImage,
           qty: dto.qty,
-          rating: dto.rating
+          rating: dto.rating,
         },
       });
       console.log(updatedProduct);
@@ -97,79 +110,79 @@ export class ProductService {
     }
   }
 
-  async getCartItems() {
-    return await this.prisma.product.findMany({
-      where: { add_to_cart: true },
-    });
-  }
+  // async getCartItems() {
+  //   return await this.prisma.product.findMany({
+  //     where: { add_to_cart: true },
+  //   });
+  // }
 
-  async addItemToCart(id: string) {
-    const productExists = await this.prisma.product.findUnique({
-      where: { id },
-    });
-    if (!productExists) {
-      throw new BadRequestException('Product not found');
-    }
+  // async addItemToCart(id: string) {
+  //   const productExists = await this.prisma.product.findUnique({
+  //     where: { id },
+  //   });
+  //   if (!productExists) {
+  //     throw new BadRequestException('Product not found');
+  //   }
 
-    await this.prisma.product.update({
-      where: { id },
-      data: { add_to_cart: true },
-    });
+  //   await this.prisma.product.update({
+  //     where: { id },
+  //     data: { add_to_cart: true },
+  //   });
 
-    return { message: 'Product added to cart successfully' };
-  }
+  //   return { message: 'Product added to cart successfully' };
+  // }
 
-  async removeItemFromCart(id: string) {
-    const productExists = await this.prisma.product.findUnique({
-      where: { id },
-    });
-    if (!productExists) {
-      throw new BadRequestException('Product not found');
-    }
+  // async removeItemFromCart(id: string) {
+  //   const productExists = await this.prisma.product.findUnique({
+  //     where: { id },
+  //   });
+  //   if (!productExists) {
+  //     throw new BadRequestException('Product not found');
+  //   }
 
-    await this.prisma.product.update({
-      where: { id },
-      data: { add_to_cart: false },
-    });
+  //   // await this.prisma.product.update({
+  //   //   where: { id },
+  //   //   data: { add_to_cart: false },
+  //   // });
 
-    return { message: 'Product removed from cart successfully' };
-  }
+  //   return { message: 'Product removed from cart successfully' };
+  // }
 
-  async getWishlistItems() {
-    return await this.prisma.product.findMany({
-      where: { wish_list: true },
-    });
-  }
+  // async getWishlistItems() {
+  //   return await this.prisma.product.findMany({
+  //     where: { wish_list: true },
+  //   });
+  // }
 
-  async addItemToWishlist(id: string) {
-    const productExists = await this.prisma.product.findUnique({
-      where: { id },
-    });
-    if (!productExists) {
-      throw new BadRequestException('Product not found');
-    }
+  // async addItemToWishlist(id: string) {
+  //   const productExists = await this.prisma.product.findUnique({
+  //     where: { id },
+  //   });
+  //   if (!productExists) {
+  //     throw new BadRequestException('Product not found');
+  //   }
 
-    await this.prisma.product.update({
-      where: { id },
-      data: { wish_list: true },
-    });
+  //   await this.prisma.product.update({
+  //     where: { id },
+  //     data: { wish_list: true },
+  //   });
 
-    return { message: 'Product added to wishlist successfully' };
-  }
+  //   return { message: 'Product added to wishlist successfully' };
+  // }
 
-  async removeItemFromWishlist(id: string) {
-    const productExists = await this.prisma.product.findUnique({
-      where: { id },
-    });
-    if (!productExists) {
-      throw new BadRequestException('Product not found');
-    }
+  // async removeItemFromWishlist(id: string) {
+  //   const productExists = await this.prisma.product.findUnique({
+  //     where: { id },
+  //   });
+  //   if (!productExists) {
+  //     throw new BadRequestException('Product not found');
+  //   }
 
-    await this.prisma.product.update({
-      where: { id },
-      data: { wish_list: false },
-    });
+  //   await this.prisma.product.update({
+  //     where: { id },
+  //     data: { wish_list: false },
+  //   });
 
-    return { message: 'Product removed from wishlist successfully' };
-  }
+  //   return { message: 'Product removed from wishlist successfully' };
+  // }
 }

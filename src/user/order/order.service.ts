@@ -4,7 +4,7 @@ import { OrderDTO } from './dto/order.dto';
 import { OrderItemDto } from './dto/order_item.dto';
 
 @Injectable()
-export class OrderSerrvice {
+export class OrderService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: OrderDTO) {
